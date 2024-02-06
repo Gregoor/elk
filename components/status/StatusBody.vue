@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { mastodon } from 'masto'
+import { fetchFrameSrc } from '@emweb/host'
 
 const {
   status,
@@ -26,6 +27,11 @@ const vnode = $computed(() => {
     inReplyToStatus: newer,
   })
 })
+
+const src = ref<string | null>(null)
+const url = /href="([^"]+)"/.exec(status.content)?.[1]
+if (url)
+  fetchFrameSrc(url ?? '').then(value => src.value = value)
 </script>
 
 <template>
@@ -35,7 +41,8 @@ const vnode = $computed(() => {
       class="content-rich line-compact" dir="auto"
       :lang="('language' in status && status.language) || undefined"
     >
-      <component :is="vnode" v-if="vnode" />
+      <component :is="vnode" v-if="vnode && !src" />
+      <StatusEmweb v-if="src" :src="src" />
     </span>
     <div v-else />
     <template v-if="translation.visible">
