@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
+    "@emweb/bus": "^0.1.1",
     "@emweb/host": "^0.1.4",
     "@fnando/sparkline": "^0.3.10",
     "@iconify-emoji/twemoji": "^1.0.2",

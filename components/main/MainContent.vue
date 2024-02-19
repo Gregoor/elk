@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { postResizeChanges } from '@emweb/bus'
+
 defineProps<{
   /** Show the back button on small screens */
   backOnSmallScreen?: boolean
@@ -22,11 +24,22 @@ const containerClass = computed(() => {
 
   return 'lg:sticky lg:top-0'
 })
+
+const isFramed = useIsFramed()
+const main = ref(null)
+
+onUpdated(() => {
+  if (isFramed && main.value) {
+    postResizeChanges(main.value)
+    document.body.style.overflow = 'hidden'
+  }
+})
 </script>
 
 <template>
   <div ref="container" :class="containerClass">
     <div
+      v-if="!isFramed"
       sticky top-0 z10
       pt="[env(safe-area-inset-top,0)]"
       bg="[rgba(var(--rgb-bg-base),0.7)]"
@@ -61,7 +74,7 @@ const containerClass = computed(() => {
       </slot>
     </div>
     <PwaInstallPrompt xl:hidden />
-    <div :class="isHydrated && wideLayout ? 'xl:w-full sm:max-w-600px' : 'sm:max-w-600px md:shrink-0'" m-auto>
+    <div ref="main" :class="isHydrated && wideLayout ? 'xl:w-full sm:max-w-600px' : 'sm:max-w-600px md:shrink-0'" m-auto>
       <div hidden :class="{ 'xl:block': $route.name !== 'tag' && !$slots.header }" h-6 />
       <slot />
     </div>

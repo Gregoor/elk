@@ -84,6 +84,7 @@ export default defineNuxtConfig({
     build: {
       target: 'esnext',
     },
+    server: { cors: true },
   },
   postcss: {
     plugins: {
@@ -122,6 +123,16 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    '/.well-known/emweb.json': {
+      cors: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Credentials': 'true',
+        'Access-Control-Allow-Headers': '*',
+        'Access-Control-Expose-Headers': '*',
+      },
+    },
     // Static generation
     '/': { prerender: true },
     '/settings/**': { prerender: false },
@@ -238,7 +249,7 @@ export default defineNuxtConfig({
         'connect-src': ['\'self\'', 'https:', 'http:', 'wss:', 'ws:'],
         'font-src': ['\'self\''],
         'form-action': ['\'none\''],
-        'frame-ancestors': ['\'none\''],
+        'frame-ancestors': ['*'],
         'frame-src': ['https:'],
         'img-src': ['\'self\'', 'https:', 'http:', 'data:', 'blob:'],
         'manifest-src': ['\'self\''],

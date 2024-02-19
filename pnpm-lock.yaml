@@ -20,6 +20,9 @@ importers:
       '@emoji-mart/data':
         specifier: ^1.1.2
         version: 1.1.2
+      '@emweb/bus':
+        specifier: ^0.1.1
+        version: 0.1.1
       '@emweb/host':
         specifier: ^0.1.4
         version: 0.1.4
@@ -1743,6 +1746,12 @@ packages:
 
   /@emoji-mart/data@1.1.2:
     resolution: {integrity: sha512-1HP8BxD2azjqWJvxIaWAMyTySeZY0Osr83ukYjltPVkNXeJvTz7yDrPLBtnrD5uqJ3tg4CcLuuBW09wahqL/fg==}
+    dev: false
+
+  /@emweb/bus@0.1.1:
+    resolution: {integrity: sha512-eYnQhatweproGkx5jAJ78FRc9Kk40FefJz8B4+/CgC/wSlqOba5d02/JCqWbwdQC0+3Um/UIgwDbXGBQZhsPKw==}
+    dependencies:
+      '@emweb/schemas': 0.1.2
     dev: false
 
   /@emweb/host@0.1.4:

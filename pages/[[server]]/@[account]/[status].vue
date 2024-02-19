@@ -62,6 +62,8 @@ onReactivated(() => {
   refreshStatus()
   refreshContext()
 })
+
+const isFramed = useIsFramed()
 </script>
 
 <template>
@@ -69,7 +71,7 @@ onReactivated(() => {
     <template v-if="!pending">
       <template v-if="status">
         <div xl:mt-4 mb="50vh" border="b base">
-          <template v-if="!pendingContext">
+          <template v-if="!pendingContext && !isFramed">
             <StatusCard
               v-for="comment, i of context?.ancestors" :key="comment.id"
               :status="comment" :actions="comment.visibility !== 'direct'" context="account"
