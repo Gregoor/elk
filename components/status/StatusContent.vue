@@ -10,6 +10,9 @@ const { status, context } = defineProps<{
   inNotification?: boolean
 }>()
 
+if (!(globalThis as any).URLPattern)
+  await import('urlpattern-polyfill')
+
 const isDM = $computed(() => status.visibility === 'direct')
 const isDetails = $computed(() => context === 'details')
 
