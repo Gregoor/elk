@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { mastodon } from 'masto'
+import { fetchFrameSrc } from '@emweb/host'
 
 const { status, context } = defineProps<{
   status: mastodon.v1.Status
@@ -31,6 +32,10 @@ const hideAllMedia = computed(
 )
 const embeddedMediaPreference = $(usePreferences('experimentalEmbeddedMedia'))
 const allowEmbeddedMedia = $computed(() => status.card?.html && embeddedMediaPreference)
+const src = ref<string | null>(null)
+const url = /href="([^"]+)"/.exec(status.content)?.[1]
+if (url)
+  fetchFrameSrc(url ?? '').then(value => src.value = value)
 </script>
 
 <template>
@@ -49,7 +54,10 @@ const allowEmbeddedMedia = $computed(() => status.card?.html && embeddedMediaPre
       <template v-else-if="filterPhrase" #spoiler>
         <p>{{ `${$t('status.filter_hidden_phrase')}: ${filterPhrase}` }}</p>
       </template>
-      <StatusBody v-if="!(isSensitiveNonSpoiler || hideAllMedia)" :status="status" :newer="newer" :with-action="!isDetails" :class="isDetails ? 'text-xl' : ''" />
+      <StatusBody v-if="!(isSensitiveNonSpoiler || hideAllMedia || src)" :status="status" :newer="newer" :with-action="!isDetails" :class="isDetails ? 'text-xl' : ''" />
+      <div border dark:border-gray-600>
+        <StatusEmweb v-if="src" :src="src" />
+      </div>
       <StatusTranslation :status="status" />
       <StatusPoll v-if="status.poll" :status="status" />
       <StatusMedia
@@ -58,7 +66,7 @@ const allowEmbeddedMedia = $computed(() => status.card?.html && embeddedMediaPre
         :is-preview="isPreview"
       />
       <StatusPreviewCard
-        v-if="status.card && !allowEmbeddedMedia"
+        v-if="status.card && !allowEmbeddedMedia && !src"
         :card="status.card"
         :small-picture-only="status.mediaAttachments?.length > 0"
       />

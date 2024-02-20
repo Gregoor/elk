@@ -27,11 +27,6 @@ const vnode = $computed(() => {
     inReplyToStatus: newer,
   })
 })
-
-const src = ref<string | null>(null)
-const url = /href="([^"]+)"/.exec(status.content)?.[1]
-if (url)
-  fetchFrameSrc(url ?? '').then(value => src.value = value)
 </script>
 
 <template>
@@ -41,8 +36,7 @@ if (url)
       class="content-rich line-compact" dir="auto"
       :lang="('language' in status && status.language) || undefined"
     >
-      <component :is="vnode" v-if="vnode && !src" />
-      <StatusEmweb v-if="src" :src="src" />
+      <component :is="vnode" v-if="vnode" />
     </span>
     <div v-else />
     <template v-if="translation.visible">
