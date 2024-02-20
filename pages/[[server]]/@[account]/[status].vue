@@ -32,11 +32,13 @@ if (pendingContext)
 if (pending)
   watchOnce(pending, scrollTo)
 
+const isFramed = useIsFramed()
+
 async function scrollTo() {
   await nextTick()
 
   const statusElement = unrefElement(main)
-  if (!statusElement)
+  if (!statusElement || isFramed)
     return
 
   statusElement.scrollIntoView(true)
@@ -62,8 +64,6 @@ onReactivated(() => {
   refreshStatus()
   refreshContext()
 })
-
-const isFramed = useIsFramed()
 </script>
 
 <template>
